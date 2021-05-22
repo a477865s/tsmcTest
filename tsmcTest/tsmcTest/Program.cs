@@ -32,11 +32,20 @@ namespace tsmcTest
             while (true)
             {
                 //手動輸入tsm價格
-                Console.WriteLine("\n請輸入tsm價格");
+                Console.WriteLine("\n請輸入tsm價格，或輸入 'E'  離開系統");
                 var inputTSMPrice = Console.ReadLine();
 
+                if (inputTSMPrice.ToUpper().Equals("E"))
+                {
+                    Console.WriteLine("離開系統~~~~~掰掰");
+                    Thread.Sleep(1000);
+
+                    break;
+                }
                 //驗證
                 var auth=CheckInputData(inputTSMPrice);
+
+
                 if (!auth)
                 {
                     Console.WriteLine("輸入錯誤請重新輸入");
@@ -54,7 +63,7 @@ namespace tsmcTest
 
                 //換算結果
                 Console.WriteLine(answer);
-
+                Console.WriteLine("***********************************************************************");
 
             }
 
@@ -77,17 +86,9 @@ namespace tsmcTest
         private static decimal CalculateNTDPrice(string price, JsonDataModel abc)
         {
             //開始計算
-            Console.WriteLine("計算中.....");
-            Thread.Sleep(2000);
-            for (int i = 0; i < 5; i++)
-            {
-                for (int j = 0; j <= i; j++)
-                {
-                    Console.Write("*");
-                }
-                Console.WriteLine();
-
-            }
+            Console.WriteLine("計算中.....\n");
+            Thread.Sleep(1000);
+            
             var answer = Decimal.Round(Convert.ToDecimal(price) / 5 * Convert.ToDecimal(abc.USDNTD), 2);
             return answer;
         }
@@ -95,6 +96,7 @@ namespace tsmcTest
         private static List<JsonDataModel> JsonData()
         {
             //tsm price https://query1.finance.yahoo.com/v8/finance/chart/tsm
+            Console.WriteLine("連線中..........");
             var client = new HttpClient();
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
