@@ -19,6 +19,68 @@ namespace tsmcTest
             Console.WriteLine("Hello World!");
 
             List<JsonDataModel> result = JsonData();
+
+            VerifyData(result);
+
+            //取得最後一筆
+            var lastData = result[result.Count - 1];
+
+
+            //日期格式為"20210606"，需求輸出為 2021-06-06
+            //解法1
+            var InsertDate = lastData.Date.Insert(4, "-").Insert(7, "-");
+            //解法2
+            var SubstringDate = lastData.Date.Substring(0, 4) + "-" + lastData.Date.Substring(4, 2) + "-" + lastData.Date.Substring(6, 2);
+
+
+            //價錢
+            Console.WriteLine("參考日期　　　：" + lastData.Date.Insert(4, "-").Insert(7, "-") + "\n");
+            Console.WriteLine("台幣兌美金　　：" + lastData.USDNTD);
+            Console.WriteLine("人民幣兌台幣　：" + lastData.RMBNTD);
+            Console.WriteLine("歐元兌美金　　：" + lastData.EURUSD);
+            Console.WriteLine("美金兌日幣　　：" + lastData.USDJPY);
+
+            while (true)
+            {
+                //手動輸入tsm價格
+                Console.WriteLine("\n請輸入tsm價格，或輸入 'E'  離開系統\n");
+                var inputTSMPrice = Console.ReadLine();
+
+                if (inputTSMPrice.ToUpper().Equals("E"))
+                {
+                    Console.WriteLine("離開系統~~~~~掰掰");
+                    Thread.Sleep(1000);
+
+                    break;
+                }
+                //驗證
+                var auth = CheckInputData(inputTSMPrice);
+
+
+                if (!auth)
+                {
+                    Console.WriteLine("輸入錯誤請重新輸入");
+                    continue;
+                }
+
+                //計算換算結果
+                decimal answer = CalculateNTDPrice(inputTSMPrice, lastData);
+
+
+
+                Console.WriteLine("\n換算結果如下\n");
+
+                //換算結果
+                Console.WriteLine(answer);
+                Console.WriteLine("***********************************************************************");
+
+            }
+
+
+        }
+
+        private static void VerifyData(List<JsonDataModel> result)
+        {
             while (true)
             {
                 if (result != null)
@@ -38,68 +100,6 @@ namespace tsmcTest
                     Environment.Exit(0);
                 }
             }
-            
-
-            
-
-            //取得最後一筆
-            var lastData = result[result.Count - 1];
-
-
-
-
-            //日期格式為"20210606"，需求輸出為 2021-06-06
-            //解法1
-            var InsertDate = lastData.Date.Insert(4, "-").Insert(7, "-");
-            //解法2
-            var SubstringDate = lastData.Date.Substring(0, 4) + "-" + lastData.Date.Substring(4, 2) + "-" + lastData.Date.Substring(6, 2);
-
-
-
-            //價錢
-            Console.WriteLine("參考日期　　　：" + lastData.Date.Insert(4, "-").Insert(7, "-")+"\n");
-            Console.WriteLine("台幣兌美金　　：" + lastData.USDNTD);
-            Console.WriteLine("人民幣兌台幣　：" + lastData.RMBNTD);
-            Console.WriteLine("歐元兌美金　　：" + lastData.EURUSD);
-            Console.WriteLine("美金兌日幣　　：" + lastData.USDJPY);
-            
-            while (true)
-            {
-                //手動輸入tsm價格
-                Console.WriteLine("\n請輸入tsm價格，或輸入 'E'  離開系統\n");
-                var inputTSMPrice = Console.ReadLine();
-
-                if (inputTSMPrice.ToUpper().Equals("E"))
-                {
-                    Console.WriteLine("離開系統~~~~~掰掰");
-                    Thread.Sleep(1000);
-
-                    break;
-                }
-                //驗證
-                var auth=CheckInputData(inputTSMPrice);
-
-
-                if (!auth)
-                {
-                    Console.WriteLine("輸入錯誤請重新輸入");
-                    continue;
-                }
-
-                //計算換算結果
-                decimal answer = CalculateNTDPrice(inputTSMPrice, lastData);             
-
-
-
-                Console.WriteLine("\n換算結果如下\n");
-
-                //換算結果
-                Console.WriteLine(answer);
-                Console.WriteLine("***********************************************************************");
-
-            }
-
-            
         }
 
         private static bool CheckInputData(string inputTSMPrice)
