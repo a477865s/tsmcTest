@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using tsmcTest.DataModel;
 
 namespace tsmcTest
 {
-    class ChecktsmcPrice
+    internal class ChecktsmcPrice
     {
-        //期交所各式資料來源網站        
+        //期交所各式資料來源網站
         //private static string DataSource = "https://openapi.taifex.com.tw/";
         private static string ForexList = "https://openapi.taifex.com.tw/v1/DailyForeignExchangeRates";
-        static void Main(string[] args)
+
+        private static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
 
@@ -25,13 +25,11 @@ namespace tsmcTest
             //取得最後一筆
             var lastData = result[result.Count - 1];
 
-
             //日期格式為"20210606"，需求輸出為 2021-06-06
             //解法1
             var InsertDate = lastData.Date.Insert(4, "-").Insert(7, "-");
             //解法2
             var SubstringDate = lastData.Date.Substring(0, 4) + "-" + lastData.Date.Substring(4, 2) + "-" + lastData.Date.Substring(6, 2);
-
 
             //價錢
             Console.WriteLine("參考日期　　　：" + lastData.Date.Insert(4, "-").Insert(7, "-") + "\n");
@@ -56,7 +54,6 @@ namespace tsmcTest
                 //驗證
                 var auth = CheckInputData(inputTSMPrice);
 
-
                 if (!auth)
                 {
                     Console.WriteLine("輸入錯誤請重新輸入");
@@ -66,17 +63,12 @@ namespace tsmcTest
                 //計算換算結果
                 decimal answer = CalculateNTDPrice(inputTSMPrice, lastData);
 
-
-
                 Console.WriteLine("\n換算結果如下\n");
 
                 //換算結果
                 Console.WriteLine(answer);
                 Console.WriteLine("***********************************************************************");
-
             }
-
-
         }
 
         private static void VerifyData(List<JsonDataModel> result)
@@ -106,19 +98,18 @@ namespace tsmcTest
         {
             var check = decimal.TryParse(inputTSMPrice, out _);
             if (!check)
-            {                
+            {
                 return false;
             }
 
             return true;
-            
         }
 
         private static decimal CalculateNTDPrice(string price, JsonDataModel abc)
         {
             //開始計算
             Console.WriteLine("計算中.....\n");
-            
+
             var answer = Decimal.Round(Convert.ToDecimal(price) / 5 * Convert.ToDecimal(abc.USDNTD), 2);
             return answer;
         }
