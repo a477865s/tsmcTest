@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>tsmcTestAPI</name>
+    </assembly>
+    <members>
+        <member name="T:tsmcTestAPI.Controllers.tsmcPriceController">
+            <summary>
+            tsmc Get Price
+            </summary>
+        </member>
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.GetTsmcprice(System.String)">
+            <summary>
+            取得所有資料
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.VerifyData(System.Collections.Generic.List{tsmcTest.DataModel.JsonDataModel})">
+            <summary>
+            檢查是否有成功取得資料
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.CheckInputData(System.String)">
+            <summary>
+            檢查輸入資料是否正確
+            </summary>
+            <param name="inputTSMPrice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.CalculateNTDPrice(System.String,tsmcTest.DataModel.JsonDataModel)">
+            <summary>
+            計算合理價值
+            </summary>
+            <param name="price"></param>
+            <param name="abc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.JsonData">
+            <summary>
+            轉換json
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
