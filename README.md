@@ -15,4 +15,4 @@
 ### [臺灣期貨交易所](https://www.taifex.com.tw/cht/3/dailyFXRate)
 ### [美股參考網站](https://www.marketwatch.com/)
 
-`輸入值可改為透過其他API獲取，可省略輸入步驟` 
+`未來擴充功能:輸入值可改為透過其他API獲取，可省略輸入步驟` 
