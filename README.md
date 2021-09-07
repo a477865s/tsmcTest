@@ -16,3 +16,5 @@
 ### [美股參考網站](https://www.marketwatch.com/)
 
 *未來擴充功能 : 輸入值可改為透過其他API獲取，可省略輸入步驟*
+
+[已部屬](https://usstockprice.azurewebsites.net/Swagger/index.html)
