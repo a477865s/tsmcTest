@@ -22,7 +22,7 @@ namespace tsmcTestAPI.Controllers
         private readonly static string ForexList = "https://openapi.taifex.com.tw/v1/DailyForeignExchangeRates";
 
         /// <summary>
-        /// 取得所有資料
+        /// 取得所有的資料
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -67,7 +67,7 @@ namespace tsmcTestAPI.Controllers
                 RMBNTD = lastData.RMBNTD,
                 EURUSD = lastData.EURUSD,
                 USDJPY = lastData.USDJPY,
-                ConvertResult=answer
+                ConvertResult = answer
             };
         }
 
