@@ -21,7 +21,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "Swagger",
-      "applicationUrl": "https://usstockprice.azurewebsites.net/Swagger/index.html",
+      "applicationUrl": "https://usstockprice.azurewebsites.net/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
