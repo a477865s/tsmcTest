@@ -8,7 +8,7 @@ using tsmcTest.DataModel;
 
 namespace tsmcTest
 {
-    internal class ChecktsmcPrice
+    public class ChecktsmcPrice
     {
         //期交所各式資料來源網站
         //private static string DataSource = "https://openapi.taifex.com.tw/";

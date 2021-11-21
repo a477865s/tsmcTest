@@ -13,5 +13,12 @@ namespace tsmcTestAPI.Controllers.ViewModel
         public string EURUSD { get; set; }
         public string USDJPY { get; set; }
         public decimal ConvertResult { get; set; }
+        public UsStock USstock { get; set; }
+    }
+
+    public class UsStock
+    {
+        public string stockName { get; set; }
+        public double regularMarketPrice { get; set; }
     }
 }

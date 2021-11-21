@@ -7,5 +7,7 @@
         public string RMBNTD { get; set; }
         public string EURUSD { get; set; }
         public string USDJPY { get; set; }
+        public double AdrPrice { get; set; }
+        public string StockName { get; set; }
     }
 }

@@ -3,10 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using tsmcTest.DataModel;
 using tsmcTestAPI.Controllers.ViewModel;
 
@@ -19,22 +22,19 @@ namespace tsmcTestAPI.Controllers
     [ApiController]
     public class tsmcPriceController : ControllerBase
     {
-        private readonly static string ForexList = "https://openapi.taifex.com.tw/v1/DailyForeignExchangeRates";
+        private static readonly string ForexUrl = "https://openapi.taifex.com.tw/v1/DailyForeignExchangeRates";
+        private static readonly string tsmPriceUrl = " https://query1.finance.yahoo.com/v8/finance/chart/tsm";
 
         /// <summary>
         /// 取得所有的資料
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("{inputPrice}")]
-        public async Task<TsmcPriceViewModel> GetTsmcprice(string inputPrice)
+        public async Task<TsmcPriceViewModel> GetTsmcprice()
         {
-            List<JsonDataModel> result = JsonData();
+            var lastData = JsonData();
 
-            VerifyData(result);
-
-            //取得最後一筆
-            var lastData = result[result.Count - 1];
+            VerifyData(lastData);
 
             //日期格式為"20210606"，需求輸出為 2021-06-06
             //解法1
@@ -50,15 +50,15 @@ namespace tsmcTestAPI.Controllers
             //Console.WriteLine("美金兌日幣　　：" + lastData.USDJPY);
 
             //驗證
-            var auth = CheckInputData(inputPrice);
+            //var auth = CheckInputData(inputPrice);
 
-            if (!auth)
-            {
-                throw new Exception("輸入錯誤請重新輸入");
-            }
+            //if (!auth)
+            //{
+            //    throw new Exception("輸入錯誤請重新輸入");
+            //}
 
             //計算換算結果
-            decimal answer = CalculateNTDPrice(inputPrice, lastData);
+            decimal answer = CalculateNTDPrice(lastData.AdrPrice, lastData);
 
             return new TsmcPriceViewModel
             {
@@ -67,7 +67,12 @@ namespace tsmcTestAPI.Controllers
                 RMBNTD = lastData.RMBNTD,
                 EURUSD = lastData.EURUSD,
                 USDJPY = lastData.USDJPY,
-                ConvertResult = answer
+                ConvertResult = answer,
+                USstock = new UsStock
+                {
+                    stockName = lastData.StockName,
+                    regularMarketPrice = lastData.AdrPrice
+                }
             };
         }
 
@@ -75,7 +80,7 @@ namespace tsmcTestAPI.Controllers
         /// 檢查是否有成功取得資料
         /// </summary>
         /// <param name="result"></param>
-        private static void VerifyData(List<JsonDataModel> result)
+        private static void VerifyData(JsonDataModel result)
         {
             while (true)
             {
@@ -119,7 +124,7 @@ namespace tsmcTestAPI.Controllers
         /// <param name="price"></param>
         /// <param name="abc"></param>
         /// <returns></returns>
-        private static decimal CalculateNTDPrice(string price, JsonDataModel abc)
+        private static decimal CalculateNTDPrice(double price, JsonDataModel abc)
         {
             return Decimal.Round(Convert.ToDecimal(price) / 5 * Convert.ToDecimal(abc.USDNTD), 2);
         }
@@ -128,20 +133,36 @@ namespace tsmcTestAPI.Controllers
         /// 轉換json
         /// </summary>
         /// <returns></returns>
-        private static List<JsonDataModel> JsonData()
+        private static JsonDataModel JsonData()
         {
-            //tsm price https://query1.finance.yahoo.com/v8/finance/chart/tsm
-            var client = new HttpClient();
-            client.BaseAddress = new Uri(ForexList);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var result = client.GetAsync(ForexList).Result;
-            var body = result.Content.ReadAsStringAsync().Result.Replace("/", "");
-            if (string.IsNullOrEmpty(body))
+            var forexClient = new HttpClient();
+            var tsmCient = new HttpClient();
+            var tsmResult = GetForexResult(tsmCient, tsmPriceUrl);
+
+            var forexResult = GetForexResult(forexClient, ForexUrl).Replace("/", "");
+
+            if (string.IsNullOrEmpty(forexResult) || string.IsNullOrEmpty(tsmResult))
             {
                 throw new Exception("連線失敗");
             }
+
+            var answer = JsonConvert.DeserializeObject<List<JsonDataModel>>(forexResult)[^1];
+
+            var tsmPriceObject = JsonConvert.DeserializeObject<tsmcTest.DataModel.UsStock>(tsmResult);
+
+            answer.AdrPrice = tsmPriceObject.chart.result.result[0].meta.regularMarketPrice;
+            answer.StockName = tsmPriceObject.result[0].meta.symbol;
+
             //TODO:反序列化
-            return JsonConvert.DeserializeObject<List<JsonDataModel>>(body);
+            return answer;
+        }
+
+        private static string GetForexResult(HttpClient forexClient, string url)
+        {
+            forexClient.BaseAddress = new Uri(url);
+            forexClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var result = forexClient.GetAsync(url).Result;
+            return result.Content.ReadAsStringAsync().Result;
         }
     }
 }
