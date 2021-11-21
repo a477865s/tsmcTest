@@ -68,7 +68,7 @@ namespace tsmcTestAPI.Controllers
                 EURUSD = lastData.EURUSD,
                 USDJPY = lastData.USDJPY,
                 ConvertResult = answer,
-                USstock = new UsStock
+                USstock = new UsStockViewModel()
                 {
                     stockName = lastData.StockName,
                     regularMarketPrice = lastData.AdrPrice
@@ -150,8 +150,8 @@ namespace tsmcTestAPI.Controllers
 
             var tsmPriceObject = JsonConvert.DeserializeObject<tsmcTest.DataModel.UsStock>(tsmResult);
 
-            answer.AdrPrice = tsmPriceObject.chart.result.result[0].meta.regularMarketPrice;
-            answer.StockName = tsmPriceObject.result[0].meta.symbol;
+            answer.AdrPrice = tsmPriceObject.chart.result[0].meta.regularMarketPrice;
+            answer.StockName = tsmPriceObject.chart.result[0].meta.symbol;
 
             //TODO:反序列化
             return answer;

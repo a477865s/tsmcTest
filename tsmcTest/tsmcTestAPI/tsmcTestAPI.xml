@@ -9,13 +9,13 @@
             tsmc Get Price
             </summary>
         </member>
-        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.GetTsmcprice(System.String)">
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.GetTsmcprice">
             <summary>
-            取得所有資料
+            取得所有的資料
             </summary>
             <returns></returns>
         </member>
-        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.VerifyData(System.Collections.Generic.List{tsmcTest.DataModel.JsonDataModel})">
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.VerifyData(tsmcTest.DataModel.JsonDataModel)">
             <summary>
             檢查是否有成功取得資料
             </summary>
@@ -28,7 +28,7 @@
             <param name="inputTSMPrice"></param>
             <returns></returns>
         </member>
-        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.CalculateNTDPrice(System.String,tsmcTest.DataModel.JsonDataModel)">
+        <member name="M:tsmcTestAPI.Controllers.tsmcPriceController.CalculateNTDPrice(System.Double,tsmcTest.DataModel.JsonDataModel)">
             <summary>
             計算合理價值
             </summary>
