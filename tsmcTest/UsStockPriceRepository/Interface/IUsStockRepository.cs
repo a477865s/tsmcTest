@@ -9,8 +9,8 @@ namespace UsStockPriceRepository.Interface
 {
     public interface IUsStockRepository
     {
-        UsStock GetStock(string stockName);
+        Task<UsStock> GetStock(string stockName);
 
-        UsStock GetTsm();
+        Task<UsStock> GetTsm();
     }
 }
