@@ -7,8 +7,10 @@ using UsStockPriceRepository.Model;
 
 namespace UsStockPriceRepository.Interface
 {
-    public interface IStockRepository
+    public interface IUsStockRepository
     {
         UsStock GetStock(string stockName);
+
+        UsStock GetTsm();
     }
 }

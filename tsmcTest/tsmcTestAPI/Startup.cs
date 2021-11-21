@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using UsStockPriceRepository.Implement;
 using UsStockPriceRepository.Interface;
@@ -34,7 +35,8 @@ namespace tsmcTestAPI
                 "v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "tsmcPriceAPI" }));
             services.AddSwaggerGenNewtonsoftSupport();
 
-            services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IUsStockRepository, UsStockRepository>();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
